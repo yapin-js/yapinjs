@@ -1,12 +1,15 @@
 # yapin.js
 
-The website for yapin.js, an unofficial client mod runtime for [Yapin'](https://yapin.gg).
-Static HTML, CSS and a few lines of JavaScript — no build step, no dependencies.
+The website for yapin.js, a bot framework for [Yapin'](https://yapin.gg) — commands, events,
+embeds, buttons and voice, with no dependencies.
+
+This repo is the site itself: static HTML, CSS and a few lines of JavaScript, no build step.
 
 Live at [yapin.js.org](https://yapin.js.org) (once the js.org PR lands) ·
 Pages URL: [yapin-js.github.io/yapinjs](https://yapin-js.github.io/yapinjs/)
 
-> The runtime itself is not written yet. The API on the site is a draft and is labelled as such.
+> The framework itself is not written yet. The API shown on the site is a draft and is
+> labelled as such.
 
 ## Layout
 

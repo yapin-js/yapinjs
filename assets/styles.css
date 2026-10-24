@@ -16,13 +16,14 @@
   --accent: #ff6b4a;
   --accent-hover: #ff5a35;
   --accent-soft: #ff6b4a1f;
-  --mark-dot: #17181b;
+  --wordmark: #ffffff;
 
   /* Code */
   --code-bg: #121316;
   --c-key: #ff9f85;
   --c-str: #7fd6a2;
   --c-fn: #f5b544;
+  --c-num: #b89cff;
   --c-com: #71737e;
 
   /* Type */
@@ -53,7 +54,7 @@
     --accent: #ff6b4a;
     --accent-hover: #e85a30;
     --accent-soft: #ff6b4a1a;
-    --mark-dot: #ffffff;
+    --wordmark: #1d1f23;
     --code-bg: #15161a;
   }
 }
@@ -71,7 +72,7 @@
   --accent: #ff6b4a;
   --accent-hover: #e85a30;
   --accent-soft: #ff6b4a1a;
-  --mark-dot: #ffffff;
+  --wordmark: #1d1f23;
   --code-bg: #15161a;
 }
 
@@ -172,13 +173,13 @@ p code, td code, li code {
 }
 .brand:hover { color: var(--text); }
 
-.mark { width: 28px; height: 28px; flex: none; }
-
+/* Wordmark is the whole logo: "yapin" white, ".js" orange, in the rounded display face. */
 .wordmark {
   font-family: var(--font-display);
   font-weight: 600;
-  font-size: 1.15rem;
-  letter-spacing: -.01em;
+  font-size: 1.3rem;
+  letter-spacing: -.015em;
+  color: var(--wordmark);
 }
 .ext { color: var(--accent); }
 
@@ -353,6 +354,7 @@ h1 { font-size: var(--fs-display); letter-spacing: -.02em; }
 .c-key { color: var(--c-key); }
 .c-str { color: var(--c-str); }
 .c-fn  { color: var(--c-fn); }
+.c-num { color: var(--c-num); }
 .c-com { color: var(--c-com); font-style: italic; }
 
 /* Bands */
@@ -426,6 +428,9 @@ h1 { font-size: var(--fs-display); letter-spacing: -.02em; }
   border: 1px solid var(--accent-soft);
   border-radius: 50%;
 }
+
+.steps .code-card { margin-top: .75rem; }
+.steps .code-card pre { padding: .7rem 1rem; }
 
 .steps h3 { font-size: 1.02rem; margin-bottom: .3rem; }
 .steps p { color: var(--muted); font-size: .94rem; }

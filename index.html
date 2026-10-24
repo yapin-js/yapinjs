@@ -4,11 +4,11 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>yapin.js</title>
-<meta name="description" content="yapin.js is an unofficial client mod runtime for Yapin'. Write a plugin as a single .js file — commands, UI patches and themes, no build step.">
+<meta name="description" content="yapin.js is a bot framework for Yapin'. Commands, events, embeds, buttons and voice in one dependency-free module for Node, Bun and Deno.">
 <meta name="color-scheme" content="dark light">
 <meta property="og:type" content="website">
 <meta property="og:title" content="yapin.js">
-<meta property="og:description" content="Write Yapin' plugins in plain JavaScript. One file, no build step, no dependencies.">
+<meta property="og:description" content="Build Yapin' bots in JavaScript. Commands, events, embeds, buttons and voice, with no dependencies.">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -21,19 +21,13 @@
 <header class="site-head">
   <div class="wrap head-inner">
     <a class="brand" href="./" aria-label="yapin.js home">
-      <svg class="mark" viewBox="0 0 64 64" aria-hidden="true" focusable="false">
-        <path d="M16 14h32a10 10 0 0 1 10 10v10a10 10 0 0 1-10 10H28l-9 8a1.6 1.6 0 0 1-2.6-1.2V44h-.4A10 10 0 0 1 6 34V24a10 10 0 0 1 10-10Z" fill="var(--accent)"/>
-        <circle cx="22" cy="29" r="3.4" fill="var(--mark-dot)"/>
-        <circle cx="32" cy="29" r="3.4" fill="var(--mark-dot)"/>
-        <circle cx="42" cy="29" r="3.4" fill="var(--mark-dot)"/>
-      </svg>
       <span class="wordmark">yapin<span class="ext">.js</span></span>
     </a>
     <nav class="nav" aria-label="Sections">
       <a href="#features">Features</a>
       <a href="#start">Quick start</a>
       <a href="#api">API</a>
-      <a class="nav-cta" href="https://github.com">GitHub</a>
+      <a class="nav-cta" href="https://github.com/yapin-js/yapinjs">GitHub</a>
     </nav>
   </div>
 </header>
@@ -43,69 +37,76 @@
   <section class="hero">
     <div class="wrap hero-inner">
       <div class="hero-copy">
-        <p class="eyebrow">Unofficial client mod runtime</p>
-        <h1>Write Yapin&rsquo; plugins in plain JavaScript.</h1>
-        <p class="lede">yapin.js loads a single <code>.js</code> file into the Yapin&rsquo; web client: slash commands, UI patches and themes. No bundler, no dependencies, no <code>package.json</code>.</p>
+        <p class="eyebrow">Bot framework for Yapin&rsquo;</p>
+        <h1>Build Yapin&rsquo; bots in JavaScript.</h1>
+        <p class="lede">Commands, events, embeds, buttons and voice in one dependency-free module. Runs on Node 18+, Bun and Deno.</p>
         <div class="cta-row">
           <a class="btn btn-primary" href="#start">Read the quick start</a>
-          <a class="btn btn-ghost" href="https://github.com">View on GitHub</a>
+          <a class="btn btn-ghost" href="https://github.com/yapin-js/yapinjs">View on GitHub</a>
         </div>
         <p class="status"><span class="dot-pulse" aria-hidden="true"></span> Pre-release. The API below is a draft and will change.</p>
       </div>
 
       <figure class="code-card">
         <figcaption class="code-head">
-          <span class="file">plugins/hello-yap.js</span>
+          <span class="file">index.js</span>
           <button class="copy" type="button" data-copy="hero-snippet">Copy</button>
         </figcaption>
-        <pre><code id="hero-snippet"><span class="c-key">import</span> { plugin } <span class="c-key">from</span> <span class="c-str">'https://yapin.js.org/v0/yapin.js'</span>
+        <pre><code id="hero-snippet"><span class="c-key">import</span> { Bot } <span class="c-key">from</span> <span class="c-str">'yapin.js'</span>
 
-<span class="c-key">export default</span> <span class="c-fn">plugin</span>({
-  name: <span class="c-str">'hello-yap'</span>,
-  version: <span class="c-str">'0.1.0'</span>,
+<span class="c-key">const</span> bot = <span class="c-key">new</span> <span class="c-fn">Bot</span>(process.env.YAPIN_TOKEN)
 
-  <span class="c-fn">setup</span>(yap) {
-    <span class="c-com">// /hello in any channel</span>
-    yap.<span class="c-fn">command</span>(<span class="c-str">'hello'</span>, (ctx) =&gt; ctx.<span class="c-fn">reply</span>(<span class="c-str">'yo'</span>))
+bot.<span class="c-fn">command</span>(<span class="c-str">'ping'</span>, (ctx) =&gt; ctx.<span class="c-fn">reply</span>(<span class="c-str">'pong'</span>))
 
-    <span class="c-com">// react to what lands in the client</span>
-    yap.<span class="c-fn">on</span>(<span class="c-str">'message'</span>, (msg) =&gt; {
-      <span class="c-key">if</span> (msg.content === <span class="c-str">'ping'</span>) yap.<span class="c-fn">toast</span>(<span class="c-str">'pong'</span>)
-    })
-  }
-})</code></pre>
+bot.<span class="c-fn">command</span>(<span class="c-str">'roll'</span>, <span class="c-key">async</span> (ctx) =&gt; {
+  <span class="c-key">const</span> sides = Number(ctx.args[<span class="c-num">0</span>] ?? <span class="c-num">20</span>)
+
+  <span class="c-key">await</span> ctx.<span class="c-fn">reply</span>({
+    embeds: [{
+      title: <span class="c-str">`d${sides}`</span>,
+      description: <span class="c-str">`You rolled **${Math.<span class="c-fn">ceil</span>(Math.<span class="c-fn">random</span>() * sides)}**`</span>,
+      color: <span class="c-str">'#ff6b4a'</span>
+    }]
+  })
+})
+
+bot.<span class="c-fn">on</span>(<span class="c-str">'member_join'</span>, (member) =&gt; {
+  bot.<span class="c-fn">send</span>(member.server.systemChannel, <span class="c-str">`welcome ${member.name}`</span>)
+})
+
+bot.<span class="c-fn">start</span>()</code></pre>
       </figure>
     </div>
   </section>
 
   <section id="features" class="band">
     <div class="wrap">
-      <h2>What the runtime gives you</h2>
-      <p class="section-lede">Everything a plugin touches goes through one object, so everything it touches can be taken back.</p>
+      <h2>What the framework handles</h2>
+      <p class="section-lede">The parts of the bot API that are tedious to write twice, and nothing beyond them.</p>
       <ul class="cards">
         <li class="card">
-          <h3>One file, no build</h3>
-          <p>A plugin is an ES module with a default export. Drop it in the folder and it loads. Nothing to install, nothing to compile.</p>
+          <h3>Commands and interactions</h3>
+          <p>Register <code>/slash</code> and <code>!prefix</code> commands in one call. Button clicks route to handlers, with ephemeral replies and live message edits.</p>
         </li>
         <li class="card">
-          <h3>Hot reload</h3>
-          <p>Save the file and <code>setup()</code> runs again in place: no page refresh, no losing your place mid-conversation.</p>
+          <h3>Events, however they arrive</h3>
+          <p>Connects over the WebSocket gateway where it is available and falls back to polling <code>/events</code>, resuming cleanly after a dropped connection.</p>
         </li>
         <li class="card">
-          <h3>Clean teardown</h3>
-          <p>Commands, listeners, styles and patches are tracked per plugin and removed on unload. Disabling a plugin leaves no trace.</p>
+          <h3>Embeds and Components V2</h3>
+          <p>Builders for embeds and for the newer layout pieces &mdash; containers, sections, galleries, separators and files &mdash; with the JSON checked before it is sent.</p>
         </li>
         <li class="card">
-          <h3>Scoped storage</h3>
-          <p><code>yap.store</code> is namespaced to your plugin and survives reloads, so settings persist without touching anything global.</p>
+          <h3>Cogs</h3>
+          <p>Group commands, buttons and listeners into one file, then load, unload or reload it while the bot is running. No restart to ship a fix.</p>
         </li>
         <li class="card">
-          <h3>Theme tokens</h3>
-          <p>Read and override the client&rsquo;s own CSS variables, like <code>--accent</code> and <code>--bg-side</code>, so a theme stays correct in light and dark.</p>
+          <h3>Voice</h3>
+          <p>Watch joins and leaves, move or disconnect members, and stream audio for music bots.</p>
         </li>
         <li class="card">
-          <h3>Bots stay bots</h3>
-          <p>yapin.js runs in your own client, for your own account. Anything that needs to act on its own belongs in Yapin&rsquo;s bot API.</p>
+          <h3>Rate limits, handled</h3>
+          <p>Per-route buckets queue requests and retry on <code>429</code>, so a busy server does not mean a dropped reply.</p>
         </li>
       </ul>
     </div>
@@ -117,16 +118,23 @@
       <p class="section-lede">Three steps, in order.</p>
       <ol class="steps">
         <li>
-          <h3>Turn on local plugins</h3>
-          <p>In Yapin&rsquo;, open <strong>Settings &rarr; Advanced</strong> and enable developer mode. A <code>plugins</code> folder appears in the panel it opens.</p>
+          <h3>Create the bot</h3>
+          <p>In Yapin&rsquo;, open <strong>Settings &rarr; Developers</strong>, create a bot and copy its token. Invite it to a server you can test in.</p>
         </li>
         <li>
-          <h3>Write the plugin</h3>
-          <p>Create <code>plugins/hello-yap.js</code> and paste the snippet from the top of this page.</p>
+          <h3>Install and write it</h3>
+          <p>Add the package, then save the snippet from the top of this page as <code>index.js</code>.</p>
+          <figure class="code-card">
+            <figcaption class="code-head">
+              <span class="file">terminal</span>
+              <button class="copy" type="button" data-copy="install-snippet">Copy</button>
+            </figcaption>
+            <pre><code id="install-snippet">npm install yapin.js        <span class="c-com"># or: bun add yapin.js</span></code></pre>
+          </figure>
         </li>
         <li>
-          <h3>Load it</h3>
-          <p>Hit reload in the plugins panel, then type <code>/hello</code> in any channel. Edit the file, save, and the change is live.</p>
+          <h3>Run it</h3>
+          <p>Start it with <code>YAPIN_TOKEN=... node index.js</code>, then type <code>/ping</code> in your server. Commands register on the first connection.</p>
         </li>
       </ol>
     </div>
@@ -134,21 +142,22 @@
 
   <section id="api" class="band">
     <div class="wrap">
-      <h2>The <code>yap</code> object</h2>
-      <p class="section-lede">The whole draft surface. Every member is available inside <code>setup()</code>.</p>
+      <h2>The <code>Bot</code> surface</h2>
+      <p class="section-lede">The whole draft API. Handlers receive a context with <code>reply()</code>, <code>args</code>, <code>author</code> and <code>channel</code>.</p>
       <div class="table-scroll">
         <table class="api">
           <thead>
             <tr><th scope="col">Member</th><th scope="col">What it does</th></tr>
           </thead>
           <tbody>
-            <tr><td><code>yap.command(name, fn)</code></td><td>Registers a slash command. <code>fn</code> gets a context with <code>reply()</code>, <code>args</code> and <code>channel</code>.</td></tr>
-            <tr><td><code>yap.on(event, fn)</code></td><td>Subscribes to a client event: <code>message</code>, <code>channel_switch</code>, <code>voice_join</code>, <code>settings_open</code>.</td></tr>
-            <tr><td><code>yap.css(text)</code></td><td>Injects a stylesheet scoped to the plugin. Returns a handle, so you can remove it early.</td></tr>
-            <tr><td><code>yap.patch(selector, fn)</code></td><td>Runs <code>fn</code> against matching elements now, and against new ones as they appear.</td></tr>
-            <tr><td><code>yap.store</code></td><td>Async key/value storage, namespaced per plugin: <code>get</code>, <code>set</code>, <code>delete</code>.</td></tr>
-            <tr><td><code>yap.toast(text, opts)</code></td><td>Shows a notice in the client&rsquo;s own toast style.</td></tr>
-            <tr><td><code>yap.onUnload(fn)</code></td><td>Cleanup for anything the runtime cannot track for you.</td></tr>
+            <tr><td><code>new Bot(token, opts)</code></td><td>Creates the client. <code>opts</code> sets the command prefix, intents and gateway preference.</td></tr>
+            <tr><td><code>bot.command(name, fn)</code></td><td>Registers a command, reachable as <code>/name</code> and <code>!name</code>.</td></tr>
+            <tr><td><code>bot.on(event, fn)</code></td><td>Subscribes to an event: <code>message</code>, <code>member_join</code>, <code>interaction</code>, <code>voice_join</code>.</td></tr>
+            <tr><td><code>bot.button(id, fn)</code></td><td>Handles clicks on a button with that custom id, anywhere the bot has posted one.</td></tr>
+            <tr><td><code>bot.send(channel, body)</code></td><td>Posts a message. <code>body</code> takes a string, or an object with <code>embeds</code> and <code>components</code>.</td></tr>
+            <tr><td><code>bot.load(path)</code></td><td>Loads a cog. <code>bot.reload(name)</code> and <code>bot.unload(name)</code> work at runtime.</td></tr>
+            <tr><td><code>bot.rest(method, route, body)</code></td><td>A raw REST call for anything the framework does not wrap yet, with rate limits still applied.</td></tr>
+            <tr><td><code>bot.start()</code></td><td>Connects and begins handling events. <code>bot.stop()</code> closes cleanly.</td></tr>
           </tbody>
         </table>
       </div>
@@ -161,12 +170,12 @@
   <div class="wrap foot-inner">
     <div class="foot-brand">
       <span class="wordmark">yapin<span class="ext">.js</span></span>
-      <p class="fine">An unofficial community project. Not made by, endorsed by or affiliated with Yapin&rsquo;.</p>
+      <p class="fine">A community project. Not made by, endorsed by or affiliated with Yapin&rsquo;.</p>
     </div>
     <nav class="foot-links" aria-label="Links">
-      <a href="https://github.com">GitHub</a>
-      <a href="https://yapin.gg">Yapin&rsquo;</a>
+      <a href="https://github.com/yapin-js/yapinjs">GitHub</a>
       <a href="https://yapin.gg/developers">Yapin&rsquo; bot docs</a>
+      <a href="https://yapin.gg">Yapin&rsquo;</a>
     </nav>
   </div>
 </footer>
