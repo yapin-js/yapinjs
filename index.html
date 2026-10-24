@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>yapin.js</title>
-<meta name="description" content="yapin.js is a bot framework for Yapin'. Commands, events, embeds, buttons and voice in one dependency-free module for Node, Bun and Deno.">
+<meta name="description" content="yapin.js is a bot framework for Yapin'. Commands, events, embeds, buttons and voice in one dependency-free module for Node, Bun and Deno — and it runs as a client mod too.">
 <meta name="color-scheme" content="dark light">
 <meta property="og:type" content="website">
 <meta property="og:title" content="yapin.js">
@@ -27,6 +27,7 @@
       <a href="#features">Features</a>
       <a href="#start">Quick start</a>
       <a href="#api">API</a>
+      <a href="#mods">Client mods</a>
       <a class="nav-cta" href="https://github.com/yapin-js/yapinjs">GitHub</a>
     </nav>
   </div>
@@ -60,11 +61,12 @@ bot.<span class="c-fn">command</span>(<span class="c-str">'ping'</span>, (ctx) =
 
 bot.<span class="c-fn">command</span>(<span class="c-str">'roll'</span>, <span class="c-key">async</span> (ctx) =&gt; {
   <span class="c-key">const</span> sides = Number(ctx.args[<span class="c-num">0</span>] ?? <span class="c-num">20</span>)
+  <span class="c-key">const</span> rolled = Math.<span class="c-fn">ceil</span>(Math.<span class="c-fn">random</span>() * sides)
 
   <span class="c-key">await</span> ctx.<span class="c-fn">reply</span>({
     embeds: [{
       title: <span class="c-str">`d${sides}`</span>,
-      description: <span class="c-str">`You rolled **${Math.<span class="c-fn">ceil</span>(Math.<span class="c-fn">random</span>() * sides)}**`</span>,
+      description: <span class="c-str">`You rolled **${rolled}**`</span>,
       color: <span class="c-str">'#ff6b4a'</span>
     }]
   })
@@ -161,6 +163,44 @@ bot.<span class="c-fn">start</span>()</code></pre>
           </tbody>
         </table>
       </div>
+    </div>
+  </section>
+
+  <section id="mods" class="band band-alt">
+    <div class="wrap">
+      <h2>The same module, in the client</h2>
+      <p class="section-lede">Load yapin.js in the Yapin&rsquo; web client instead of against a bot token and it runs as a client mod, so one API covers both.</p>
+      <div class="split">
+        <ul class="points">
+          <li><strong>One file, no build.</strong> A mod is an ES module with a default export. Drop it in the client&rsquo;s mods folder and it loads.</li>
+          <li><strong>Hot reload.</strong> Save the file and <code>setup()</code> runs again in place, with no page refresh.</li>
+          <li><strong>Clean teardown.</strong> Commands, listeners and styles are tracked per mod and removed on unload, so disabling one leaves no trace.</li>
+          <li><strong>Theme tokens.</strong> Read and override the client&rsquo;s own CSS variables, so a mod stays correct in light and dark.</li>
+        </ul>
+        <figure class="code-card">
+          <figcaption class="code-head">
+            <span class="file">mods/quick-peek.js</span>
+            <button class="copy" type="button" data-copy="mod-snippet">Copy</button>
+          </figcaption>
+          <pre><code id="mod-snippet"><span class="c-key">import</span> { mod } <span class="c-key">from</span> <span class="c-str">'yapin.js/client'</span>
+
+<span class="c-key">export default</span> <span class="c-fn">mod</span>({
+  name: <span class="c-str">'quick-peek'</span>,
+  version: <span class="c-str">'0.1.0'</span>,
+
+  <span class="c-fn">setup</span>(yap) {
+    yap.<span class="c-fn">command</span>(<span class="c-str">'shrug'</span>, (ctx) =&gt; ctx.<span class="c-fn">reply</span>(<span class="c-str">'idk'</span>))
+
+    yap.<span class="c-fn">on</span>(<span class="c-str">'channel_switch'</span>, (ch) =&gt; {
+      yap.<span class="c-fn">toast</span>(<span class="c-str">`now in #${ch.name}`</span>)
+    })
+
+    yap.<span class="c-fn">css</span>(<span class="c-str">`.message:hover { background: var(--bg-hover) }`</span>)
+  }
+})</code></pre>
+        </figure>
+      </div>
+      <p class="caution">A mod changes your own client; it does not automate your account. Anything that should act on its own belongs in a bot.</p>
     </div>
   </section>
 

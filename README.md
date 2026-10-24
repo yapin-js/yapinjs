@@ -1,7 +1,8 @@
 # yapin.js
 
 The website for yapin.js, a bot framework for [Yapin'](https://yapin.gg) — commands, events,
-embeds, buttons and voice, with no dependencies.
+embeds, buttons and voice, with no dependencies. The same module loads in the Yapin' web
+client, so it doubles as a client mod runtime.
 
 This repo is the site itself: static HTML, CSS and a few lines of JavaScript, no build step.
 
