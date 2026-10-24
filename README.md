@@ -3,13 +3,14 @@
 The website for yapin.js, an unofficial client mod runtime for [Yapin'](https://yapin.gg).
 Static HTML, CSS and a few lines of JavaScript — no build step, no dependencies.
 
-Live at **https://yapin.js.org** · Pages URL: **https://yapin-js.github.io/yapinjs/**
+Live at [yapin.js.org](https://yapin.js.org) (once the js.org PR lands) ·
+Pages URL: [yapin-js.github.io/yapinjs](https://yapin-js.github.io/yapinjs/)
 
 > The runtime itself is not written yet. The API on the site is a draft and is labelled as such.
 
 ## Layout
 
-```
+```text
 index.html         the whole page
 assets/styles.css  design tokens + layout
 assets/main.js     copy buttons
@@ -32,7 +33,7 @@ python -m http.server 8000
 npx serve .
 ```
 
-Then open http://localhost:8000.
+Then open <http://localhost:8000>.
 
 ## Deploying
 
@@ -40,7 +41,10 @@ Pushing to `main` triggers `.github/workflows/pages.yml`, which uploads the repo
 deploys it to GitHub Pages. Pages must be set to **Source: GitHub Actions** in the repo
 settings (Settings → Pages).
 
-The `CNAME` file is part of the artifact, so the custom domain is applied on every deploy.
+A `CNAME` file is **not** read when publishing from a workflow, so it does not set the
+custom domain here. It is kept in the repo because js.org's instructions reference it and
+because it would take effect if this ever switched to branch-based publishing. The domain
+itself is set under Settings → Pages → Custom domain — see the sequencing note below.
 
 ## The js.org subdomain
 
@@ -51,15 +55,24 @@ add one line to `cnames_active.js`, in alphabetical order:
 "yapin": "yapin-js.github.io/yapinjs",
 ```
 
-Their checklist, and where this repo stands:
+It belongs between `"yana"` and `"yargs"`, around line 3880 of that file.
 
-- [x] `CNAME` file containing `yapin.js.org`
-- [x] A real page with content, not a placeholder
-- [x] JavaScript-related project
-- [ ] Site reachable at the Pages URL above (needs the first deploy to finish)
+Their requirements, and where this repo stands:
 
-Once the PR is merged, DNS points `yapin.js.org` at GitHub Pages and the certificate is
-issued automatically. Until then the Pages URL serves the same site.
+- [x] JavaScript-related project, not a personal page or portfolio
+- [x] Substantive content, not a placeholder
+- [x] No automatic redirects away from js.org
+- [x] Hosted on GitHub Pages at `yapin-js.github.io/yapinjs`
+- [x] `CNAME` file present (not read by workflow publishing, but harmless)
+
+**Order matters.** Do not set the custom domain in Settings → Pages until the js.org PR is
+merged. Setting it early makes the Pages URL redirect to `yapin.js.org`, which does not
+resolve yet, so reviewers would find a dead link. The sequence is:
+
+1. Open the js.org PR with the entry above and the Pages URL as the target.
+2. Wait for the merge — the DNS record goes live within about 24 hours.
+3. Then set `yapin.js.org` as the custom domain in Settings → Pages and enable
+   **Enforce HTTPS** once the certificate is issued.
 
 ## Design
 
